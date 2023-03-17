@@ -60,13 +60,22 @@ time.sleep(7)
 
 # Claim Management menu -> filter using TASK ID
 print("Claim Management menu")
+txt_task_id = drv.find_element(By.XPATH, "//input[@id='doc-task_id']")
+cmb_status = drv.find_element(By.XPATH, "//select[@id='doc-status']")
+btn_search = drv.find_element(By.XPATH, "//a[@id='search-btn']")
+txt_task_id.clear()
+txt_task_id.send_keys("TSK-CLM-20230102000013")
+all_option = cmb_status.find_elements(By.TAG_NAME, "option")
+for option in all_option:
+    if option.text == "ANY STATUS":
+        option.click()
+        break
 
-
-# # search the insurance claim
-# print("search the insurance claim")
-# # drv.implicitly_wait(120)
-# btn_search.click()
-# time.sleep(5)
+# search the insurance claim
+print("search the insurance claim")
+# drv.implicitly_wait(120)
+btn_search.click()
+time.sleep(5)
 # tbl = drv.find_element(By.XPATH, "//table[@id='tbl_doc_list']")
 # tbody = tbl.find_element(By.TAG_NAME, "tbody")
 # # all_tbody = drv.find_elements(By.TAG_NAME, "tbody")
