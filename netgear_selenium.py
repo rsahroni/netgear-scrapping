@@ -20,9 +20,9 @@ txt_username = drv.find_element(By.XPATH, "//input[@id='inputEmail']")
 txt_password = drv.find_element(By.XPATH, "//input[@id='inputPassword']")
 
 txt_username.clear()
-txt_username.send_keys("84187907")
+txt_username.send_keys("")
 txt_password.clear()
-txt_password.send_keys("Mathe@isat24.51")
+txt_password.send_keys("")
 txt_password.send_keys(Keys.RETURN)
 # time.sleep(2)
 # choose Claim Management menu
@@ -74,7 +74,8 @@ for tr in all_tr:
     # except:
     #     print("other error")
     # all_td = tr.find_elements(By.TAG_NAME, "td")
-    btn_view = tr.find_element(By.XPATH, "//button[@class='btn-view btn btn-sm vd_green vd_bd-green ']").send_keys(Keys.RETURN)
+    btn_view = tr.find_element(
+        By.XPATH, "//button[@class='btn-view btn btn-sm vd_green vd_bd-green ']").send_keys(Keys.RETURN)
     # btn_print = tr.find_element(By.XPATH, "//button[@class='btn-print btn btn-sm vd_blue vd_bd-blue ']").send_keys(Keys.RETURN)
     # for td in all_td:
     #     try:
