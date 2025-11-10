@@ -134,16 +134,9 @@ for tsk in taskid_list:
     btn_reset_filter = drv_wait.until(
         EC.presence_of_element_located((By.XPATH, "//*[@id='filter-reset-btn']"))
     )
-    # print("done wait btn_reset_filter")
     txt_task_id = drv.find_element(By.XPATH, "//input[@id='doc-task_id']")
-    # txt_task_id = drv_wait.until(
-    #     EC.presence_of_element_located((By.XPATH, "//input[@id='doc-task_id']"))
-    # )
     cmb_status = drv.find_element(By.XPATH, "//select[@id='doc-status']")
     btn_search = drv.find_element(By.XPATH, "//a[@id='search-btn']")
-    # btn_search = drv_wait.until(
-    #     EC.presence_of_element_located((By.XPATH, "//a[@id='search-btn']"))
-    # )
     txt_task_id.clear()
     txt_task_id.send_keys(tsk)
     opt_status = cmb_status.find_elements(By.TAG_NAME, "option")
@@ -163,7 +156,6 @@ for tsk in taskid_list:
                 )
             )
         )
-        # print("done wait btn_view_detail")
         btn_view_detail.click()
     except TimeoutException:
         wb.close()
@@ -209,26 +201,12 @@ for tsk in taskid_list:
             "/html/body/div[2]/div[2]/div[2]/form/div/div/div[5]/div[1]/div[2]/select",
         )
     )
-    # opt_cause_loss = cmb_cause_loss.find_elements(By.TAG_NAME, "option")
-    # itm_cause_loss = ""
-    # for option in opt_cause_loss:
-    #     if option.is_selected:
-    #         itm_cause_loss = option.text
-    #         break
     lbl_event_date = drv.find_element(By.XPATH, '//*[@id="detail_form-event_date"]')
     time.sleep(2)
     tbl_item_list = drv.find_element(
         By.XPATH,
         "/html/body/div[2]/div[2]/div[2]/form/div/div/div[13]/div/div/table/tbody",
     )
-    # tbl_item_list = drv_wait.until(
-    #     EC.presence_of_element_located(
-    #         (
-    #             By.XPATH,
-    #             "//*[@id='tbl_item_list']",
-    #         )
-    #     )
-    # )
     ws.write(row, 0, tsk_no)
     for tr_item in tbl_item_list.find_elements(By.TAG_NAME, "tr"):
         col = 1
@@ -243,16 +221,6 @@ for tsk in taskid_list:
         ws.write(row, col + 7, cmb_cause_loss.first_selected_option.text)
         ws.write(row, col + 8, lbl_event_date.get_attribute("value"))
         col += 9
-        # for td_item in tr_item.find_elements(By.TAG_NAME, "td"):
-        # td_items = drv_wait.until(
-        #     EC.presence_of_all_elements_located(
-        #         (
-        #             By.XPATH,
-        #             f"/html/body/div[2]/div[2]/div[2]/form/div/div/div[13]/div/div/table/tbody/tr[{row}]/td",
-        #         )
-        #     )
-        # )
-        # time.sleep(3)
         try:
             td_items = tr_item.find_elements(By.TAG_NAME, "td")
         except NoSuchElementException:
@@ -281,31 +249,7 @@ for tsk in taskid_list:
                 col += 1
             i += 1
         row += 1
-    time.sleep(2)
-    btn_print = drv.find_element(
-        By.XPATH, "/html/body/div[2]/div[1]/div[2]/div/table/tbody/tr/td[9]/button[2]"
-    )
-    btn_print.send_keys(Keys.RETURN)
-    # drv.implicitly_wait(15)
-    # time.sleep(15)
-    # j = 0
-    # for handle in drv.window_handles:
-    #     if j == 1:
-    #         drv.switch_to.window(handle)
-    #         break
-    #     j += 1
-    # print(f"Active window: {drv.title}")
-    # btn_download = drv_wait.until(
-    #     EC.presence_of_element_located(
-    #         (
-    #             By.XPATH,
-    #             "//cr-icon-button[@id='download']",
-    #         )
-    #     )
-    # )
-    # btn_download.send_keys(Keys.RETURN)
     tsk_no += 1
-    # break
 
 print(f"Save result to: {new_filename_path}")
 wb.close()
