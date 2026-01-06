@@ -128,8 +128,11 @@ try:
         chrome_options.add_argument("--disable-gpu")  # Often recommended for headless
     else:
         log_message("Running with a visible browser window.", "info")
+        chrome_options.add_argument("--start-maximized")
 
     # This will automatically download and set up the appropriate chromedriver
+    # The cache path is already set via os.environ["WDM_LOCAL"].
+    # This ensures webdriver-manager uses the specified directory and avoids conflicts.
     service = Service(ChromeDriverManager().install())
     log_message("Initializing Chrome browser service...", "process")
     driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -204,14 +207,9 @@ try:
         {"start": "", "end": "2023-01-01"},
         {"start": "2023-01-01", "end": "2024-01-01"},
         {"start": "2024-01-01", "end": "2025-01-01"},
-        {"start": "2025-01-01", "end": ""},
-        # Add more date ranges here as needed
+        {"start": "2025-01-01", "end": "2025-07-01"},
+        {"start": "2025-07-01", "end": ""},
     ]
-    # date_ranges_to_process = [
-    #     {"start": "2025-01-01", "end": "2025-01-02"},
-    #     {"start": "2025-01-02", "end": "2025-01-03"},
-    #     # Add more date ranges here as needed
-    # ]
 
     # Loop through each date range and perform the download
     i: int = 1
@@ -255,6 +253,7 @@ try:
         end_date_field.clear()
         end_date_field.send_keys(end_date)
 
+        countdown(2, "Pausing before applying filter")
         apply_filter_button = wait_short.until(
             EC.element_to_be_clickable((By.ID, "filter_form-apply"))
         )
