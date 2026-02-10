@@ -133,8 +133,8 @@ try:
     # This will automatically download and set up the appropriate chromedriver
     # The cache path is already set via os.environ["WDM_LOCAL"].
     # This ensures webdriver-manager uses the specified directory and avoids conflicts.
-    service = Service(ChromeDriverManager().install())
     log_message("Initializing Chrome browser service...", "process")
+    service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
     log_message(
         "WebDriver setup complete. Browser is running in the background.", "success"
