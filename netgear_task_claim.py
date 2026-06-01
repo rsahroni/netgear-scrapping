@@ -74,9 +74,11 @@ def get_credentials():
 
     username = ""
     if saved_username:
-        use_saved = (
-            input(f"Use saved username '{saved_username}'? (Y/n): ").lower().strip()
-        )
+        use_saved = input(f"Use saved username '{saved_username}'? (Y/n): ")
+        if use_saved:
+            use_saved = use_saved.lower().strip()
+        else:
+            raise Exception("Interrupted by user.")
         if use_saved in ["", "y", "yes"]:
             username = saved_username
             log_message(f"Using username: {username}", "info")
@@ -100,6 +102,7 @@ print(" " * 15 + "Task Claim Downloader")
 print(" " * 18 + "by Rahmat Sahroni")
 print("=" * 50)
 
+driver = None
 try:
     # Determine if the browser should be shown based on command-line arguments
     # Use --show-browser when running the script to make the browser visible.
@@ -134,7 +137,20 @@ try:
     # The cache path is already set via os.environ["WDM_LOCAL"].
     # This ensures webdriver-manager uses the specified directory and avoids conflicts.
     log_message("Initializing Chrome browser service...", "process")
-    service = Service(ChromeDriverManager().install())
+    try:
+        service = Service(ChromeDriverManager().install())
+    except Exception as e:
+        log_message(f"Automatic driver download failed: {e}", "error")
+        log_message("Attempting to use local 'chromedriver.exe'...", "process")
+        local_driver_path = os.path.join(os.path.dirname(__file__), "chromedriver.exe")
+        if os.path.exists(local_driver_path):
+            service = Service(executable_path=local_driver_path)
+            log_message(f"Using local driver: {local_driver_path}", "success")
+        else:
+            raise Exception(
+                "Automatic download failed and local 'chromedriver.exe' not found."
+            )
+
     driver = webdriver.Chrome(service=service, options=chrome_options)
     log_message(
         "WebDriver setup complete. Browser is running in the background.", "success"
@@ -208,7 +224,8 @@ try:
         {"start": "2023-01-01", "end": "2024-01-01"},
         {"start": "2024-01-01", "end": "2025-01-01"},
         {"start": "2025-01-01", "end": "2025-07-01"},
-        {"start": "2025-07-01", "end": ""},
+        {"start": "2025-07-01", "end": "2026-01-01"},
+        {"start": "2026-01-01", "end": ""},
     ]
 
     # Loop through each date range and perform the download
@@ -387,5 +404,6 @@ finally:
         new_line_before=True,
     )
     input()
-    driver.quit()
+    if driver:
+        driver.quit()
     log_message("Browser closed.", "info")
